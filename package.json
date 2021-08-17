@@ -4,7 +4,7 @@
   "description": "TypeScript mixins made easy",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && node dist/mixin.js"
   },
   "repository": {
     "type": "git",

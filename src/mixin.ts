@@ -1,4 +1,4 @@
-export function mixin(base: Constructor, ...mixes: Constructor[]) {
+export function mixin(base: Constructor, mixes: Constructor[]) {
   mixes.forEach(mix => {
     Object.keys(mix).forEach(key => {
       base[key] = mix[key]
@@ -25,7 +25,7 @@ class Person {
   name = 'Me'
 }
 
-const MixedPerson = mixin(Person, Jumpable);
+const MixedPerson = mixin(Person, [Jumpable]);
 const me = new MixedPerson()
 me.jump()
 console.log(me.name, MixedPerson.jumpHeight)
