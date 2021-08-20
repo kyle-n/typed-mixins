@@ -5,6 +5,9 @@ class Person {
 class Jumpable {
   jump!: () => void;
 }
+class Flyable {
+  fly!: () => void;
+}
 
 type AllBools<T> = {
   [Property in keyof T]: T[Property]
@@ -28,8 +31,11 @@ type TupleIntersect = UnionToIntersection<Tupled>
 
 function mixin<T, Z>(base: T, mixins: Array<Z>) {
   const x = 1;
+  type Mixins = typeof mixins
+  type MixinUnion = Mixins[number]
+  type MixinIntersection = UnionToIntersection<MixinUnion>
   // @ts-ignore
-  return x as T & Z
+  return x as MixinIntersection & T
 }
 
-const x: Person & Jumpable = mixin(Person.prototype, [Jumpable.prototype])
+const x = mixin(Person.prototype, [Jumpable.prototype, Flyable.prototype])
