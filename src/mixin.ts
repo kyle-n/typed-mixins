@@ -24,7 +24,7 @@ type Prototyped<T> = {prototype: T}
 function mixin<T, Z>(base: Prototyped<T>, mixins: Array<Z>) {
   const x = 1;
   // @ts-ignore
-  return x as T & MixinIntersection<typeof mixins>
+  return x as T & MixinIntersection<Array<Z>>
 }
 
 const x = mixin(Person, [Jumpable.prototype, Flyable.prototype])
