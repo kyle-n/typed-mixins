@@ -1,31 +1,35 @@
-export function mixin(base: Constructor, mixes: Constructor[]) {
-  mixes.forEach(mix => {
-    Object.keys(mix).forEach(key => {
-      base[key] = mix[key]
-    })
-    Object.keys(mix.prototype).forEach(key => {
-      base.prototype[key] = mix.prototype[key]
-    })
-  })
-  return base;
-}
-
-// type Constructor = new (...args: any[]) => {};
-type Constructor = any;
-
-class Jumpable {
-  static jumpHeight = 10;
-
-  jump() {
-    console.log('jumped')
-  }
-}
-
 class Person {
-  name = 'Me'
+  id!: number;
+  name!: string;
+}
+class Jumpable {
+  jump!: () => void;
 }
 
-const MixedPerson = mixin(Person, [Jumpable]);
-const me = new MixedPerson()
-me.jump()
-console.log(me.name, MixedPerson.jumpHeight)
+type AllBools<T> = {
+  [Property in keyof T]: T[Property]
+}
+type BoolPerson = AllBools<Person>
+
+const c: BoolPerson = {
+  id: 1,
+  name: 'Charlotte'
+}
+
+const jumper: Jumpable = {
+  jump: () => console.log('jumped!')
+}
+
+const tuple = [c, jumper] as const;
+type Tupled = (typeof tuple)[number]
+type UnionToIntersection<U> = 
+  (U extends any ? (k: U)=>void : never) extends ((k: infer I)=>void) ? I : never
+type TupleIntersect = UnionToIntersection<Tupled>
+
+function mixin<T, Z>(base: T, mixins: Array<Z>) {
+  const x = 1;
+  // @ts-ignore
+  return x as T & Z
+}
+
+const x: Person & Jumpable = mixin(Person.prototype, [Jumpable.prototype])
