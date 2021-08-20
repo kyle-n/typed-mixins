@@ -21,10 +21,10 @@ type MixinIntersection<T extends Array<any>> = UnionToIntersection<(T)[number]>
 
 type Prototyped<T> = {prototype: T}
 
-function mixin<T, Z>(base: Prototyped<T>, mixins: Array<Z>) {
+function mixin<X, Y>(base: Prototyped<X>, mixins: Array<Y>) {
   const x = 1;
   // @ts-ignore
-  return x as T & MixinIntersection<Array<Z>>
+  return x as X & MixinIntersection<Array<Y>>
 }
 
 const x = mixin(Person, [Jumpable.prototype, Flyable.prototype])
