@@ -9,33 +9,20 @@ class Flyable {
   fly!: () => void;
 }
 
-type AllBools<T> = {
-  [Property in keyof T]: T[Property]
-}
-type BoolPerson = AllBools<Person>
-
-const c: BoolPerson = {
-  id: 1,
-  name: 'Charlotte'
-}
-
 const jumper: Jumpable = {
   jump: () => console.log('jumped!')
 }
 
-const tuple = [c, jumper] as const;
-type Tupled = (typeof tuple)[number]
+// https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
 type UnionToIntersection<U> = 
   (U extends any ? (k: U)=>void : never) extends ((k: infer I)=>void) ? I : never
-type TupleIntersect = UnionToIntersection<Tupled>
+
+type MixinIntersection<T extends Array<any>> = UnionToIntersection<(T)[number]>
 
 function mixin<T, Z>(base: T, mixins: Array<Z>) {
   const x = 1;
-  type Mixins = typeof mixins
-  type MixinUnion = Mixins[number]
-  type MixinIntersection = UnionToIntersection<MixinUnion>
   // @ts-ignore
-  return x as MixinIntersection & T
+  return x as T & MixinIntersection<typeof mixins>
 }
 
 const x = mixin(Person.prototype, [Jumpable.prototype, Flyable.prototype])
