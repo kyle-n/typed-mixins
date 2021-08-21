@@ -19,15 +19,15 @@ type UnionToIntersection<U> =
 
 type MixinIntersection<T extends Array<any>> = UnionToIntersection<(T)[number]>
 
-type Obj = {};
+type KeyedObject = {[key: string]: any};
 type Prototyped<T> = {prototype: T}
-type RealType<T> = T extends Prototyped<Obj> ? T['prototype'] : T;
+type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['prototype'] : T;
 
-function mixin<X extends RealType<Obj>, Y extends RealType<Obj>>(base: X, mixins: Array<Y>) {
+function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   const x = 1;
   return x as RealType<X> & MixinIntersection<Array<RealType<Y>>>
 }
 
 const x = mixin(Person, [Jumpable, Flyable])
-const y = {scum: 'NA'}
+const y = {1: 'na'}
 const z = mixin(Person, [y])
