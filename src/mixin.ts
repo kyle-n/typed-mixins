@@ -22,14 +22,28 @@ type KeyedObject = {[key: string]: any};
 type Prototyped<T> = {prototype: T}
 type ClassType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T : T['prototype'];
 type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['prototype'] : T;
+declare type Constructor<T> = new (...args: any[]) => T;
 
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   const x = 1;
   // @ts-ignore
-  return x as (new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>) & X & MixinIntersection<Array<Y>>
+  type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
+  type MixedStatic = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
+  return x as MixedConstructor & MixedStatic
 }
 
 const y = {1: 'na'}
 const XClass = mixin(Person, [Jumpable, Flyable])
-const v = new XClass()
 
+class Test extends mixin(Person, [Flyable]) {
+  constructor() {
+    super()
+  }
+
+  doThing() {
+    this.fly()
+    console.log('doing thing')
+  }
+}
+
+const v = new Test()
