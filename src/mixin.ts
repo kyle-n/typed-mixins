@@ -1,8 +1,10 @@
 class Person {
+  static totalPopulation = 10;
   id!: number;
   name!: string;
 }
 class Jumpable {
+  static gravity = 9.8;
   jump!: () => void;
 }
 class Flyable {
@@ -24,7 +26,7 @@ type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['pr
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   const x = 1;
   // @ts-ignore
-  return x as (new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>)
+  return x as (new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>) & X & MixinIntersection<Array<Y>>
 }
 
 const y = {1: 'na'}
