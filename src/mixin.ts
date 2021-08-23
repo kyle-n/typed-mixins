@@ -24,13 +24,9 @@ declare type Constructor<T> = new (...args: any[]) => T;
 
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   mixins.forEach(mixin => {
-    const staticProps = Object.keys(mixin);
-    // @ts-ignore
-    const instance = new mixin()
-    const instanceProps = Object.keys(instance)
-    const prototypeProps = Object.keys(mixin.prototype)
 
-    staticProps.forEach(property => {
+    // static properties
+    Object.keys(mixin).forEach(property => {
       Object.defineProperty(
         base,
         property,
@@ -38,7 +34,8 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
       )
     })
 
-    prototypeProps.forEach(property => {
+    // class methods on prototype
+    Object.keys(mixin.prototype).forEach(property => {
       Object.defineProperty(
         base.prototype,
         property,
@@ -46,7 +43,10 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
       )
     })
 
-    instanceProps.forEach(property => {
+    // Instance properties (vars, arrow functions)
+    // @ts-ignore
+    const instance = new mixin()
+    Object.keys(instance).forEach(property => {
       Object.defineProperty(
         base.prototype,
         property,
