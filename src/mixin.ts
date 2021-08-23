@@ -22,7 +22,12 @@ type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['pr
 declare type Constructor<T> = new (...args: any[]) => T;
 
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
-  // @ts-ignore
+  mixins.forEach(mixin => {
+    Object.keys(mixin).forEach(property => {
+      // @ts-ignore
+      base[property] = mixin[property]
+    })
+  })
   type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
   type MixedStatic = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
   return base as MixedConstructor & MixedStatic
