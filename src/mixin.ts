@@ -27,8 +27,11 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
     const instanceProps = Object.keys(mixin.prototype)
 
     staticProps.forEach(property => {
-      // @ts-ignore
-      base[property] = mixin[property]
+      Object.defineProperty(
+        base,
+        property,
+        Object.getOwnPropertyDescriptor(mixin, property) || Object.create(null)
+      )
     })
 
     instanceProps.forEach(property => {
@@ -48,7 +51,5 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
 const y = {1: 'na'}
 const XClass = mixin(Person, [Jumpable, Flyable])
 const z = new XClass()
-// console.log(XClass.totalPopulation, 'total pop')
-console.log(Object.keys(z), 'z keys')
 z.fly()
 z.jump()
