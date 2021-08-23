@@ -6,10 +6,10 @@ class Person {
 class Jumpable {
   static gravity = 9.8;
   height = 2
-  jump = () => {}
+  jump() { console.log('jumped') }
 }
 class Flyable {
-  fly = () => {}
+  fly() { console.log('flew') }
 }
 
 // https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
@@ -23,11 +23,23 @@ declare type Constructor<T> = new (...args: any[]) => T;
 
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   mixins.forEach(mixin => {
-    Object.keys(mixin).forEach(property => {
+    const staticProps = Object.keys(mixin);
+    const instanceProps = Object.keys(mixin.prototype)
+
+    staticProps.forEach(property => {
       // @ts-ignore
       base[property] = mixin[property]
     })
+
+    instanceProps.forEach(property => {
+      Object.defineProperty(
+        base.prototype,
+        property,
+        Object.getOwnPropertyDescriptor(mixin.prototype, property) || Object.create(null)
+      )
+    })
   })
+
   type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
   type MixedStatic = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
   return base as MixedConstructor & MixedStatic
@@ -35,3 +47,8 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
 
 const y = {1: 'na'}
 const XClass = mixin(Person, [Jumpable, Flyable])
+const z = new XClass()
+// console.log(XClass.totalPopulation, 'total pop')
+console.log(Object.keys(z), 'z keys')
+z.fly()
+z.jump()
