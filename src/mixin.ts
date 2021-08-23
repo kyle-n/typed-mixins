@@ -7,6 +7,7 @@ class Jumpable {
   static gravity = 9.8;
   height = 2
   jump() { console.log('jumped') }
+  doubleJump = () => console.log('double')
 }
 class Flyable {
   fly() { console.log('flew') }
@@ -24,7 +25,10 @@ declare type Constructor<T> = new (...args: any[]) => T;
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   mixins.forEach(mixin => {
     const staticProps = Object.keys(mixin);
-    const instanceProps = Object.keys(mixin.prototype)
+    // @ts-ignore
+    const instance = new mixin()
+    const instanceProps = Object.keys(instance)
+    const prototypeProps = Object.keys(mixin.prototype)
 
     staticProps.forEach(property => {
       Object.defineProperty(
@@ -34,11 +38,19 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
       )
     })
 
-    instanceProps.forEach(property => {
+    prototypeProps.forEach(property => {
       Object.defineProperty(
         base.prototype,
         property,
         Object.getOwnPropertyDescriptor(mixin.prototype, property) || Object.create(null)
+      )
+    })
+
+    instanceProps.forEach(property => {
+      Object.defineProperty(
+        base.prototype,
+        property,
+        Object.getOwnPropertyDescriptor(instance, property) || Object.create(null)
       )
     })
   })
@@ -49,7 +61,6 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
 }
 
 const y = {1: 'na'}
-const XClass = mixin(Person, [Jumpable, Flyable])
+const XClass = mixin(Person, [Jumpable])
 const z = new XClass()
-z.fly()
-z.jump()
+z.doubleJump()
