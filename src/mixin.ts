@@ -22,6 +22,7 @@ type ClassType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T : 
 type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['prototype'] : T;
 declare type Constructor<T> = new (...args: any[]) => T;
 
+// https://stackoverflow.com/a/45332959
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
   // @ts-ignore
   class baseClass extends base {
@@ -54,6 +55,8 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
 }
 
 const y = {1: 'na'}
-const XClass = mixin(Person, [Jumpable])
+const XClass = mixin(Person, [Jumpable, Flyable])
 const z = new XClass()
 z.doubleJump()
+console.log(z.height)
+z.fly()
