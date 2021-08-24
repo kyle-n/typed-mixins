@@ -2,15 +2,19 @@ class Person {
   static totalPopulation = 10;
   id = 12
   name!: string;
+
+  constructor() {console.log('building a person')}
 }
 class Jumpable {
   static gravity = 9.8;
   height = 2
   jump() { console.log('jumped') }
   doubleJump = () => console.log('double')
+  constructor() {console.log('building a jumper')}
 }
 class Flyable {
   fly() { console.log('flew') }
+  constructor() {console.log('building a flyer')}
 }
 
 // https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
@@ -23,44 +27,37 @@ type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['pr
 declare type Constructor<T> = new (...args: any[]) => T;
 
 function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
-  mixins.forEach(mixin => {
-
-    // static properties
-    Object.keys(mixin).forEach(property => {
-      Object.defineProperty(
-        base,
-        property,
-        Object.getOwnPropertyDescriptor(mixin, property) || Object.create(null)
-      )
-    })
-
-    // class methods on prototype
-    Object.keys(mixin.prototype).forEach(property => {
-      Object.defineProperty(
-        base.prototype,
-        property,
-        Object.getOwnPropertyDescriptor(mixin.prototype, property) || Object.create(null)
-      )
-    })
-
-    // Instance properties (vars, arrow functions)
-    // @ts-ignore
-    const instance = new mixin()
-    Object.keys(instance).forEach(property => {
-      Object.defineProperty(
-        base.prototype,
-        property,
-        Object.getOwnPropertyDescriptor(instance, property) || Object.create(null)
-      )
-    })
-  })
+  // @ts-ignore
+  class baseClass extends base {
+      constructor (...args: any[]) {
+          super(...args);
+          mixins.forEach((mixin) => {
+  // @ts-ignore
+              copyProps(this,(new mixin));
+          });
+      }
+  }
+  let copyProps = (target: any, source: any) => {  // this function copies all properties and symbols, filtering out some special ones
+      Object.getOwnPropertyNames(source)
+            .concat(Object.getOwnPropertySymbols(source).map(symbol => symbol.toString()))
+            .forEach((prop) => {
+               if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
+                  Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)!);
+             })
+  }
+  mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+      copyProps(base.prototype, mixin.prototype);
+      copyProps(base, mixin);
+  });
 
   type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
   type MixedStatic = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
-  return base as MixedConstructor & MixedStatic
+  console.log('returning class')
+  return baseClass as MixedConstructor & MixedStatic
 }
 
 const y = {1: 'na'}
 const XClass = mixin(Person, [Jumpable])
+console.log(XClass.totalPopulation, 'total')
 const z = new XClass()
 z.doubleJump()
