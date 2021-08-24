@@ -2,19 +2,15 @@ class Person {
   static totalPopulation = 10;
   id = 12
   name!: string;
-
-  constructor() {console.log('building a person')}
 }
 class Jumpable {
   static gravity = 9.8;
   height = 2
   jump() { console.log('jumped') }
   doubleJump = () => console.log('double')
-  constructor() {console.log('building a jumper')}
 }
 class Flyable {
   fly() { console.log('flew') }
-  constructor() {console.log('building a flyer')}
 }
 
 // https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
@@ -32,12 +28,13 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
       constructor (...args: any[]) {
           super(...args);
           mixins.forEach((mixin) => {
-  // @ts-ignore
+              // @ts-ignore
               copyProps(this,(new mixin));
           });
       }
   }
-  let copyProps = (target: any, source: any) => {  // this function copies all properties and symbols, filtering out some special ones
+
+  const copyProps = (target: any, source: any) => {  // this function copies all properties and symbols, filtering out some special ones
       Object.getOwnPropertyNames(source)
             .concat(Object.getOwnPropertySymbols(source).map(symbol => symbol.toString()))
             .forEach((prop) => {
@@ -45,19 +42,18 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
                   Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)!);
              })
   }
-  mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+
+  mixins.forEach((mixin) => {
       copyProps(base.prototype, mixin.prototype);
       copyProps(base, mixin);
   });
 
   type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
   type MixedStatic = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
-  console.log('returning class')
   return baseClass as MixedConstructor & MixedStatic
 }
 
 const y = {1: 'na'}
 const XClass = mixin(Person, [Jumpable])
-console.log(XClass.totalPopulation, 'total')
 const z = new XClass()
 z.doubleJump()
