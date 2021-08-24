@@ -30,7 +30,8 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
           super(...args);
           mixins.forEach((mixin) => {
               // @ts-ignore
-              copyProps(this,(new mixin));
+              if (mixin.prototype?.constructor) copyProps(this,(new mixin));
+              else copyProps(this, mixin)
           });
       }
   }
@@ -45,8 +46,8 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
   }
 
   mixins.forEach((mixin) => {
-      copyProps(base.prototype, mixin.prototype);
-      copyProps(base, mixin);
+    if (base.prototype && mixin.prototype) copyProps(base.prototype, mixin.prototype);
+    copyProps(base, mixin);
   });
 
   type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
@@ -54,9 +55,9 @@ function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>
   return baseClass as MixedConstructor & MixedStatic
 }
 
-const y = {1: 'na'}
-const XClass = mixin(Person, [Jumpable, Flyable])
+const y = {'one': 'na'}
+const XClass = mixin(Person, [Jumpable, y])
 const z = new XClass()
 z.doubleJump()
 console.log(z.height)
-z.fly()
+console.log(z.one)
