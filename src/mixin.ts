@@ -56,3 +56,13 @@ function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObje
 
 const XClass = mixin(Person, [Jumpable, Flyable])
 const z = new XClass()
+
+class Extended extends (XClass as MixedConstructor<typeof Person, typeof Jumpable | typeof Flyable>) {
+  test() {
+    this.doubleJump()
+    console.log(this.id)
+  }
+}
+
+const e = new Extended()
+e.test()
