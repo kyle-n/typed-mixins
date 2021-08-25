@@ -3,11 +3,10 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type MixinIntersection<T extends Array<any>> = UnionToIntersection<(T)[number]>
 type KeyedObject = {[key: string]: any};
 type Prototyped<T> = {prototype: T}
-type ClassType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T : T['prototype'];
-type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['prototype'] : T;
+type RealType<T extends KeyedObject> = T['prototype'];
 declare type Constructor<T> = new (...args: any[]) => T;
 type MixedConstructor<X, Y> = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
-type MixedStatic<X, Y> = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
+type MixedStatic<X, Y> = X & MixinIntersection<Array<Y>>
 
 // https://stackoverflow.com/a/45332959
 function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObject>>(base: X, mixins: Array<Y>) {
