@@ -19,6 +19,7 @@
   "homepage": "https://github.com/kyle-n/simple-mixins#readme",
   "devDependencies": {
     "esbuild": "^0.12.20",
+    "prettier": "^2.3.2",
     "typescript": "^4.3.5"
   }
 }
