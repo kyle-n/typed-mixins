@@ -23,7 +23,7 @@ type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['pr
 declare type Constructor<T> = new (...args: any[]) => T;
 
 // https://stackoverflow.com/a/45332959
-function mixin<X extends RealType<KeyedObject>, Y extends RealType<KeyedObject>>(base: X, mixins: Array<Y>) {
+function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObject>>(base: X, mixins: Array<Y>) {
   // @ts-ignore
   class baseClass extends base {
       constructor (...args: any[]) {
