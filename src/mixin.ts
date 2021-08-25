@@ -14,7 +14,7 @@ type MixedConstructor<X, Y> = new () => RealType<X> &
 type MixedStatic<X, Y> = X & MixinIntersection<Array<Y>>;
 
 // https://stackoverflow.com/a/45332959
-function mixin<
+export function mixin<
   X extends Prototyped<KeyedObject>,
   Y extends Prototyped<KeyedObject>
 >(base: X, mixins: Array<Y>) {
@@ -30,7 +30,6 @@ function mixin<
   }
 
   const copyProps = (target: any, source: any) => {
-    // this function copies all properties and symbols, filtering out some special ones
     Object.getOwnPropertyNames(source)
       .concat(
         Object.getOwnPropertySymbols(source).map((symbol) => symbol.toString())
