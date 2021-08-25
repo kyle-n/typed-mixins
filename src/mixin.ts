@@ -51,13 +51,15 @@ function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObje
     copyProps(base, mixin);
   });
 
-  return baseClass as MixedConstructor<X, Y> & MixedStatic<X, Y>
+  (baseClass as any).extendable = baseClass.prototype.constructor
+
+  return baseClass as MixedConstructor<X, Y> & MixedStatic<X, Y> & {extendable: MixedConstructor<X, Y>}
 }
 
 const XClass = mixin(Person, [Jumpable, Flyable])
 const z = new XClass()
 
-class Extended extends (XClass as MixedConstructor<typeof Person, typeof Jumpable | typeof Flyable>) {
+class Extended extends XClass.extendable {
   test() {
     this.doubleJump()
     console.log(this.id)
