@@ -30,6 +30,7 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "src/*": "prettier --write --ignore-unknown"
+    "src/*": "prettier --write --ignore-unknown",
+    "tests/*": "prettier --write --ignore-unknown"
   }
 }
