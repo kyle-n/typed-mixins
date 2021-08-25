@@ -1,18 +1,3 @@
-class Person {
-  static totalPopulation = 10;
-  id = 12
-  name!: string;
-}
-class Jumpable {
-  static gravity = 9.8;
-  height = 2
-  jump() { console.log('jumped') }
-  doubleJump = () => console.log('double')
-}
-class Flyable {
-  fly() { console.log('flew') }
-}
-
 // https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
 type MixinIntersection<T extends Array<any>> = UnionToIntersection<(T)[number]>
@@ -55,16 +40,3 @@ function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObje
 
   return baseClass as MixedConstructor<X, Y> & MixedStatic<X, Y> & {extendable: MixedConstructor<X, Y>}
 }
-
-const XClass = mixin(Person, [Jumpable, Flyable])
-const z = new XClass()
-
-class Extended extends XClass.extendable {
-  test() {
-    this.doubleJump()
-    console.log(this.id)
-  }
-}
-
-const e = new Extended()
-e.test()
