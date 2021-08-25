@@ -4,7 +4,7 @@
   "description": "TypeScript mixins made easy",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && node dist/mixin.js",
+    "test": "jest -c tests/jest.config.js",
     "prepare": "husky install"
   },
   "repository": {
