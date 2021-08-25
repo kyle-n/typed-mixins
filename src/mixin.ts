@@ -21,6 +21,8 @@ type Prototyped<T> = {prototype: T}
 type ClassType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T : T['prototype'];
 type RealType<T extends KeyedObject> = T extends Prototyped<KeyedObject> ? T['prototype'] : T;
 declare type Constructor<T> = new (...args: any[]) => T;
+type MixedConstructor<X, Y> = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
+type MixedStatic<X, Y> = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
 
 // https://stackoverflow.com/a/45332959
 function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObject>>(base: X, mixins: Array<Y>) {
@@ -49,12 +51,8 @@ function mixin<X extends Prototyped<KeyedObject>, Y extends Prototyped<KeyedObje
     copyProps(base, mixin);
   });
 
-  type MixedConstructor = new () => RealType<X> & MixinIntersection<Array<RealType<Y>>>
-  type MixedStatic = ClassType<X> & MixinIntersection<Array<ClassType<Y>>>
-  return baseClass as MixedConstructor & MixedStatic
+  return baseClass as MixedConstructor<X, Y> & MixedStatic<X, Y>
 }
 
 const XClass = mixin(Person, [Jumpable, Flyable])
 const z = new XClass()
-z.doubleJump()
-console.log(z.height)
