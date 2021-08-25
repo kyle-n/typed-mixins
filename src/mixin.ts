@@ -7,7 +7,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type MixinIntersection<T extends Array<any>> = UnionToIntersection<T[number]>;
 type KeyedObject = { [key: string]: any };
 type Prototyped<T> = { prototype: T };
-type RealType<T extends KeyedObject> = T["prototype"];
+type RealType<T extends KeyedObject> = T['prototype'];
 declare type Constructor<T> = new (...args: any[]) => T;
 type MixedConstructor<X, Y> = new () => RealType<X> &
   MixinIntersection<Array<RealType<Y>>>;
