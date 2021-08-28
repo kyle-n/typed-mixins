@@ -1,5 +1,5 @@
 {
-  "name": "simple-mixins",
+  "name": "typed-mixins",
   "version": "1.0.0",
   "description": "TypeScript mixins made easy",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/kyle-n/simple-mixins.git"
   },
-  "keywords": [],
+  "keywords": ["typescript", "mixin", "mixins", "typed"],
   "author": "Kyle Nazario",
   "license": "MIT",
   "bugs": {
