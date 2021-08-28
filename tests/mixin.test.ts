@@ -28,12 +28,12 @@ describe('mixin', () => {
   });
 
   it('should copy static properties', () => {
-    SuperHero.soar();
-    expect(SuperHero.legs).toBe(2);
+    SuperHero.staticProps.soar();
+    expect(SuperHero.staticProps.legs).toBe(2);
   });
 
   it('should be extendable', () => {
-    class CapedSuperHero extends SuperHero.extendable {
+    class CapedSuperHero extends SuperHero {
       twirl() {
         this.doubleJump();
       }
