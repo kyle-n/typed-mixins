@@ -6,8 +6,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "dist",
-    "rootDir": "src",
+    "outDir": "../dist",
+    "rootDir": "../src",
     "strict": true,
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,6 +17,6 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src"
+    "../src"
   ]
 }

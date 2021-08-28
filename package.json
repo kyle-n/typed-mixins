@@ -4,8 +4,9 @@
   "description": "TypeScript mixins made easy",
   "main": "index.js",
   "scripts": {
+    "compile": "tsc -p build/tsconfig.json",
     "test": "jest -c tests/jest.config.js",
-    "prepare": "husky install"
+    "prepare": "husky install && npm run compile"
   },
   "repository": {
     "type": "git",
