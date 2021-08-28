@@ -31,8 +31,8 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "src/*": "prettier --write --ignore-unknown",
-    "tests/*": "prettier --write --ignore-unknown"
+    "src/*": "prettier --config build/.prettierrc.json --write --ignore-unknown",
+    "tests/*": "prettier --config build/.prettierrc.json --write --ignore-unknown"
   },
   "files": [
     "dist/*"
