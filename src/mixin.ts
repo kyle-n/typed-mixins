@@ -54,6 +54,12 @@ export function mixin<
     copyProps(base, mixin);
   });
 
+  Object.defineProperty(baseClass, 'Instance', {
+    get: function () {
+      throw new Error('Instance property on mixed classes is only for typing');
+    },
+  });
+
   return baseClass as MixedConstructor<X, Y> &
     MixedStatic<X, Y> & {
       Instance: RealType<X> & UnionToIntersection<RealType<Y>>;

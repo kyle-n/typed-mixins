@@ -41,4 +41,9 @@ describe('mixin', () => {
     const capeGuy = new CapedSuperHero();
     capeGuy.twirl();
   });
+
+  it('should throw on accessing mixed class Instance prop', () => {
+    const getInstance = () => SuperHero.Instance;
+    expect(getInstance).toThrow();
+  });
 });
