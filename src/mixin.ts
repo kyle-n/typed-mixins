@@ -11,7 +11,8 @@ type RealType<T extends KeyedObject> = T['prototype'];
 declare type Constructor<T> = new (...args: any[]) => T;
 type MixedConstructor<X, Y> = new () => RealType<X> &
   MixinIntersection<Array<RealType<Y>>>;
-type MixedStatic<X, Y> = X & MixinIntersection<Array<Y>>;
+type MixedStatic<X, Y> = Objectified<X> & Objectified<UnionToIntersection<Y>>;
+type Objectified<T> = { [Prop in keyof T]: T[Prop] };
 
 // https://stackoverflow.com/a/45332959
 export function mixin<
@@ -55,7 +56,5 @@ export function mixin<
 
   (baseClass as any).extendable = baseClass.prototype.constructor;
 
-  return baseClass as MixedConstructor<X, Y> & {
-    staticProps: MixedStatic<X, Y>;
-  };
+  return baseClass as MixedConstructor<X, Y> & MixedStatic<X, Y>;
 }

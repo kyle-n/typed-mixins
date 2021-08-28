@@ -28,8 +28,8 @@ describe('mixin', () => {
   });
 
   it('should copy static properties', () => {
-    SuperHero.staticProps.soar();
-    expect(SuperHero.staticProps.legs).toBe(2);
+    SuperHero.soar();
+    expect(SuperHero.legs).toBe(2);
   });
 
   it('should be extendable', () => {
