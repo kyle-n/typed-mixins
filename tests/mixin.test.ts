@@ -15,7 +15,7 @@ describe('mixin', () => {
   }
 
   const SuperHero = mixin(Person, [Jumpable, Flyable]);
-  let hero: Person & Jumpable & Flyable;
+  let hero: typeof SuperHero.Instance;
 
   beforeEach(() => {
     hero = new SuperHero();

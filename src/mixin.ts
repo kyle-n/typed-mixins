@@ -54,7 +54,8 @@ export function mixin<
     copyProps(base, mixin);
   });
 
-  (baseClass as any).extendable = baseClass.prototype.constructor;
-
-  return baseClass as MixedConstructor<X, Y> & MixedStatic<X, Y>;
+  return baseClass as MixedConstructor<X, Y> &
+    MixedStatic<X, Y> & {
+      Instance: RealType<X> & UnionToIntersection<RealType<Y>>;
+    };
 }
