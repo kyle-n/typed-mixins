@@ -18,13 +18,11 @@ export function mixin<
   X extends Prototyped<KeyedObject>,
   Y extends Prototyped<KeyedObject>
 >(base: X, mixins: Array<Y>) {
-  // @ts-ignore
-  class MixedClass extends base {
+  class MixedClass extends (base as any) {
     constructor(...args: any[]) {
       super(...args);
       mixins.forEach((mixin) => {
-        // @ts-ignore
-        copyProps(this, new mixin());
+        copyProps(this, new (mixin as any)());
       });
     }
   }
