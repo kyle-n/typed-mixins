@@ -20,7 +20,7 @@ export function mixin<
   Y extends Prototyped<KeyedObject>
 >(base: X, mixins: Array<Y>) {
   // @ts-ignore
-  class baseClass extends base {
+  class MixedClass extends base {
     constructor(...args: any[]) {
       super(...args);
       mixins.forEach((mixin) => {
@@ -54,13 +54,13 @@ export function mixin<
     copyProps(base, mixin);
   });
 
-  Object.defineProperty(baseClass, 'Instance', {
+  Object.defineProperty(MixedClass, 'Instance', {
     get: function () {
       throw new Error('Instance property on mixed classes is only for typing');
     },
   });
 
-  return baseClass as MixedConstructor<X, Y> &
+  return MixedClass as MixedConstructor<X, Y> &
     MixedStatic<X, Y> & {
       Instance: RealType<X> & UnionToIntersection<RealType<Y>>;
     };
