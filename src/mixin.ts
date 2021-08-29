@@ -8,13 +8,27 @@ type MixinIntersection<T extends Array<any>> = UnionToIntersection<T[number]>;
 type KeyedObject = { [key: string]: any };
 type Prototyped<T> = { prototype: T };
 type RealType<T extends KeyedObject> = T['prototype'];
-type MixedConstructor<X extends Constructor<any>, Y> = new (
-  ...args: ConstructorParameters<X>
-) => RealType<X> & MixinIntersection<Array<RealType<Y>>>;
-type ArgumentlessConstructor<T> = new () => T;
-type Constructor<T> = new (...args: any[]) => T;
 type MixedStatic<X, Y> = Objectified<X> & Objectified<UnionToIntersection<Y>>;
 type Objectified<T> = { [Prop in keyof T]: T[Prop] };
+
+type ArgumentlessConstructor<T> = new () => T;
+type Constructor<T> = new (...args: any[]) => T;
+type FlexConstructor<T> = Constructor<T> | ArgumentlessConstructor<T>;
+type MixedConstructorReturn<X, Y> = RealType<X> &
+  MixinIntersection<Array<RealType<Y>>>;
+type MixedConstructorWithArgs<X extends FlexConstructor<any>, Y> = new (
+  ...args: ConstructorParameters<X>
+) => MixedConstructorReturn<X, Y>;
+type MixedConstructorWithoutArgs<
+  X extends FlexConstructor<any>,
+  Y
+> = new () => MixedConstructorReturn<X, Y>;
+type MixedConstructor<
+  X extends FlexConstructor<any>,
+  Y
+> = X extends Constructor<any>
+  ? MixedConstructorWithArgs<X, Y>
+  : MixedConstructorWithoutArgs<X, Y>;
 
 // https://stackoverflow.com/a/45332959
 export function mixin<

@@ -43,7 +43,7 @@ describe('mixin', () => {
         this.doubleJump();
       }
     }
-    const capeGuy = new CapedSuperHero();
+    const capeGuy = new CapedSuperHero('Cape Guy');
     capeGuy.twirl();
   });
 
