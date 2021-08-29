@@ -71,3 +71,4 @@ capeGuy.twirl();         // 'jumped', 'twirled'
 
 - The base class and all mixins must be classes. No plain-old JavaScript objects.
 - Mixin classes cannot use constructor arguments (prevents really tortured syntax in the returned constructor)
+- This package ships as ES6 because [transpiled ES5 classes cannot extend native classes](https://stackoverflow.com/a/51860850)
