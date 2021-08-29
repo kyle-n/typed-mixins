@@ -8,7 +8,7 @@ type MixinIntersection<T extends Array<any>> = UnionToIntersection<T[number]>;
 type KeyedObject = { [key: string]: any };
 type Prototyped<T> = { prototype: T };
 type RealType<T extends KeyedObject> = T['prototype'];
-type MixedConstructor<X, Y> = new () => RealType<X> &
+type MixedConstructor<X, Y> = new (...args: any[]) => RealType<X> &
   MixinIntersection<Array<RealType<Y>>>;
 type MixedStatic<X, Y> = Objectified<X> & Objectified<UnionToIntersection<Y>>;
 type Objectified<T> = { [Prop in keyof T]: T[Prop] };
