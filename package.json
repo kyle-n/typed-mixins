@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyle-n/simple-mixins.git"
+    "url": "git+https://github.com/kyle-n/typed-mixins.git"
   },
   "keywords": ["typescript", "mixin", "mixins", "typed"],
   "author": "Kyle Nazario",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyle-n/simple-mixins/issues"
+    "url": "https://github.com/kyle-n/typed-mixins/issues"
   },
-  "homepage": "https://github.com/kyle-n/simple-mixins#readme",
+  "homepage": "https://github.com/kyle-n/typed-mixins#readme",
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",
