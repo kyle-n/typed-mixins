@@ -11,15 +11,16 @@ type RealType<T extends KeyedObject> = T['prototype'];
 type MixedConstructor<X, Y> = new (...args: any[]) => RealType<X> &
   MixinIntersection<Array<RealType<Y>>>;
 type ArgumentlessConstructor<T> = new () => T;
+type Constructor<T> = new (...args: any[]) => T;
 type MixedStatic<X, Y> = Objectified<X> & Objectified<UnionToIntersection<Y>>;
 type Objectified<T> = { [Prop in keyof T]: T[Prop] };
 
 // https://stackoverflow.com/a/45332959
 export function mixin<
-  X extends Prototyped<KeyedObject>,
+  X extends Prototyped<KeyedObject> & Constructor<any>,
   Y extends Prototyped<KeyedObject> & ArgumentlessConstructor<any>
 >(base: X, mixins: Array<Y>) {
-  class MixedClass extends (base as any) {
+  class MixedClass extends base {
     constructor(...args: any[]) {
       super(...args);
       mixins.forEach((mixin) => {
