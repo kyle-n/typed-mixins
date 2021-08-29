@@ -2,6 +2,15 @@
 
 Mix classes together to share simple pieces of reusable functionality. Just Works&trade; with TypeScript.
 
+```typescript
+const SuperHero = mixin(Person, [Jumpable, Flyable]);
+
+// hero is automatically typed as Person & Flyable & Jumpable
+const hero = new SuperHero();
+```
+
+No casting objects as an interface, no `any`. `typed-mixins` work perfectly out of the box with TypeScript.
+
 ## Installing
 
 `npm install typed-mixins`
@@ -58,6 +67,7 @@ const capeGuy = new CapedSuperHero();
 capeGuy.twirl();         // 'jumped', 'twirled'
 ```
 
-## Advantages
+### Restrictions
 
-`typed-mixins` works out of the box perfectly with TypeScript. No casting objects as an interface or `any`. This package tells TypeScript you really do have all the given properties on your mixed class.
+- The base class and all mixins must be classes. No plain-old JavaScript objects.
+- Mixin classes cannot use constructor arguments (prevents really tortured syntax in the returned constructor)
