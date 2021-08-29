@@ -2,7 +2,11 @@ import { mixin } from '../src/mixin';
 
 describe('mixin', () => {
   class Person {
-    name!: string;
+    name: string;
+
+    constructor(name: string) {
+      this.name = name;
+    }
   }
   class Jumpable {
     static legs = 2;
@@ -18,13 +22,14 @@ describe('mixin', () => {
   let hero: typeof SuperHero.Instance;
 
   beforeEach(() => {
-    hero = new SuperHero();
+    hero = new SuperHero('Ordinary Man');
   });
 
   it('should copy instance properties', () => {
     hero.jump();
     hero.doubleJump();
     expect(hero.height).toBe(12);
+    expect(hero.name).toBe('Ordinary Man');
   });
 
   it('should copy static properties', () => {
